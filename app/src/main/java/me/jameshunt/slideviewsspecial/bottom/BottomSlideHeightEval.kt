@@ -2,7 +2,6 @@ package me.jameshunt.slideviewsspecial.bottom
 
 import android.animation.IntEvaluator
 import android.view.View
-import me.jameshunt.slideviewsspecial.Contract
 import me.jameshunt.slideviewsspecial.SlideOnTouch
 import me.jameshunt.slideviewsspecial.SlideOnTouch.SlideValues.getTopHandleHeightForBottomTouch
 
@@ -25,7 +24,7 @@ class BottomSlideHeightEval(private val bottomView: View, private val topView: V
         return bottomParams.height
     }
 
-    private fun moveTop(fraction: Float ,startValue: Int, endValue: Int) {
+    private fun moveTop(fraction: Float, startValue: Int, endValue: Int) {
         val topParams = topView.layoutParams
 
         topStartHeight = topParams.height

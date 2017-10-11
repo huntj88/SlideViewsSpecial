@@ -1,8 +1,8 @@
 package me.jameshunt.slideviewsspecial
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
+import android.support.v7.app.AppCompatActivity
 import android.view.MotionEvent
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
         handleSlideTop()
         handleSlideBottom()
 
-        album_selected.setOnClickListener{
+        album_selected.setOnClickListener {
             presenter.albumSelected = !presenter.albumSelected
         }
     }
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
     }
 
     private fun handleSlideBottom() {
-        val bottomSlideTouch = SlideBottomOnTouch(slide_view_bottom, slide_view_top, presenter)
+        val bottomSlideTouch = SlideBottomOnTouch(slide_view_bottom, slide_view_top)
         setupSlideTouchListener(slide_handle_bottom, bottomSlideTouch)
     }
 

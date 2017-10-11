@@ -9,7 +9,7 @@ interface Contract {
 
     }
 
-    interface Presenter: PresenterForSlide {
+    interface Presenter : PresenterForSlide {
         var view: View
         var albumSelected: Boolean
 
