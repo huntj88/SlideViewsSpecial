@@ -38,8 +38,8 @@ interface SlideOnTouch {
     }
 
     companion object SlideValues {
-        val bottomHandleHeight: Int = Dimensions.dpToPx(28).toInt()
-        val topHandleBaseHeight = Dimensions.dpToPx(80).toInt()
+        val bottomHandleHeight: Int = Dimensions.dpToPx(40).toInt()
+        private val topHandleBaseHeight = Dimensions.dpToPx(80).toInt()
 
 
         fun getTopHandleHeightForTopTouch(presenterForSlide: Contract.PresenterForSlide, placeToSnap: PlaceToSnap): Int {

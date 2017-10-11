@@ -51,7 +51,8 @@ class SlideTopOnTouch(private val topView: View, private val bottomView: View, p
 
     private fun getBottomHeight(): Int {
 
-        val topHandleHeight: Int = getTopHandleHeightForTopTouch(presenterForSlide, snapToLocation)
+        //use BOTTOM for placeToSnap just so animation is smooth.
+        val topHandleHeight: Int = getTopHandleHeightForTopTouch(presenterForSlide, PlaceToSnap.BOTTOM)
 
         val percent = (lastY - topHandleHeight) / screenHeight.toFloat()
         val heightRequest = Math.round(SlideOnTouch.bottomHandleHeight - (percent * SlideOnTouch.bottomHandleHeight))
