@@ -6,4 +6,10 @@ package me.jameshunt.slideviewsspecial
 class Presenter: Contract.Presenter {
 
     override lateinit var view: Contract.View
+
+    override var albumSelected: Boolean = false
+
+    override fun isAlbumSelected(): Boolean {
+        return albumSelected
+    }
 }

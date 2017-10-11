@@ -1,17 +1,19 @@
 package me.jameshunt.slideviewsspecial.bottom
 
 import android.animation.ValueAnimator
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
+import me.jameshunt.slideviewsspecial.Contract
 import me.jameshunt.slideviewsspecial.SlideOnTouch
 import me.jameshunt.slideviewsspecial.SlideOnTouch.PlaceToSnap
+import me.jameshunt.slideviewsspecial.SlideOnTouch.SlideValues.bottomHandleHeight
+import me.jameshunt.slideviewsspecial.SlideOnTouch.SlideValues.getTopHandleHeightForBottomTouch
 
 /**
  * Created by James on 10/11/2017.
  */
-class SlideBottomOnTouch(private val bottomView: View, private val topView: View): SlideOnTouch {
+class SlideBottomOnTouch(private val bottomView: View, private val topView: View, private val presenterForSlide: Contract.PresenterForSlide) : SlideOnTouch {
 
     private var startHeight = 0
     private var lastY = 0
@@ -43,14 +45,21 @@ class SlideBottomOnTouch(private val bottomView: View, private val topView: View
         val topParams = topView.layoutParams
         topParams.height = getTopHeight()
         topView.layoutParams = topParams
-
-        Log.d("y", event.rawY.toString() + "     " + bottomParams.height)
     }
 
     private fun getTopHeight(): Int {
-        val percent = lastY / screenHeight.toFloat()
-        val heightRequest = Math.round(percent * SlideOnTouch.topHandleTitleHeight)
-        return Math.min(heightRequest, SlideOnTouch.topHandleTitleHeight)
+        val topHandleHeight: Int = getTopHandleHeightForBottomTouch()
+
+        val percent =
+                when (startHeight == SlideOnTouch.bottomHandleHeight) {
+
+                    true -> Math.max((lastY) / screenHeight.toFloat(), 0f)
+
+                    false -> Math.max((lastY - topHandleHeight) / screenHeight.toFloat(), 0f)
+                }
+
+        val heightRequest = Math.round(percent * topHandleHeight)
+        return Math.min(heightRequest, topHandleHeight)
     }
 
     override fun actionUp(event: MotionEvent) {

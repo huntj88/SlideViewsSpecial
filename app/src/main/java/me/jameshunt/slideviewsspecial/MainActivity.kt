@@ -7,6 +7,7 @@ import android.view.MotionEvent
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottom_slide.*
+import kotlinx.android.synthetic.main.middle_layout.*
 import kotlinx.android.synthetic.main.top_slide.*
 import me.jameshunt.slideviewsspecial.bottom.SlideBottomOnTouch
 import me.jameshunt.slideviewsspecial.top.SlideTopOnTouch
@@ -25,6 +26,10 @@ class MainActivity : AppCompatActivity(), Contract.View {
 
         handleSlideTop()
         handleSlideBottom()
+
+        album_selected.setOnClickListener{
+            presenter.albumSelected = !presenter.albumSelected
+        }
     }
 
     private fun addTopSlide() {
@@ -32,7 +37,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
 
         val screenHeight = resources.displayMetrics.heightPixels - Dimensions.dpToPx(24)
 
-        val height = (screenHeight + Dimensions.dpToPx(80)).toInt()
+        val height = (screenHeight + Dimensions.dpToPx(60)).toInt()
         val width = resources.displayMetrics.widthPixels
 
         val params: ConstraintLayout.LayoutParams = ConstraintLayout.LayoutParams(width, height)
@@ -42,12 +47,12 @@ class MainActivity : AppCompatActivity(), Contract.View {
     }
 
     private fun handleSlideTop() {
-        val topSlideTouch: SlideOnTouch = SlideTopOnTouch(slide_view_top, slide_view_bottom)
+        val topSlideTouch: SlideOnTouch = SlideTopOnTouch(slide_view_top, slide_view_bottom, presenter)
         setupSlideTouchListener(slide_handle_top, topSlideTouch)
     }
 
     private fun handleSlideBottom() {
-        val bottomSlideTouch = SlideBottomOnTouch(slide_view_bottom, slide_view_top)
+        val bottomSlideTouch = SlideBottomOnTouch(slide_view_bottom, slide_view_top, presenter)
         setupSlideTouchListener(slide_handle_bottom, bottomSlideTouch)
     }
 

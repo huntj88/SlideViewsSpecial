@@ -2,12 +2,14 @@ package me.jameshunt.slideviewsspecial.top
 
 import android.animation.IntEvaluator
 import android.view.View
+import me.jameshunt.slideviewsspecial.Contract
 import me.jameshunt.slideviewsspecial.SlideOnTouch
+import me.jameshunt.slideviewsspecial.SlideOnTouch.SlideValues.getTopHandleHeightForTopTouch
 
 /**
  * Created by James on 10/10/2017.
  */
-class TopSlideHeightEval(private val topView: View, private val bottomView: View): IntEvaluator() {
+class TopSlideHeightEval(private val topView: View, private val bottomView: View, private val presenterForSlide: Contract.PresenterForSlide, private val snapToLocation: SlideOnTouch.PlaceToSnap): IntEvaluator() {
 
     private var bottomStartHeight = 0
 
@@ -21,7 +23,9 @@ class TopSlideHeightEval(private val topView: View, private val bottomView: View
 
         bottomStartHeight = bottomParams.height
 
-        if(startValue in SlideOnTouch.topHandleTitleHeight until endValue)
+        val topHandleHeight: Int = getTopHandleHeightForTopTouch(presenterForSlide, snapToLocation)
+
+        if(startValue in topHandleHeight until endValue)
             bottomParams.height = super.evaluate(fraction, bottomStartHeight, 0)
         else if(startValue > endValue)
             bottomParams.height = super.evaluate(fraction, bottomStartHeight, SlideOnTouch.bottomHandleHeight)

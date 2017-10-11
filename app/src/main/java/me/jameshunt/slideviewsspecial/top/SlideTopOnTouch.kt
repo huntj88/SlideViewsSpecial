@@ -4,14 +4,15 @@ import android.animation.ValueAnimator
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
-import me.jameshunt.slideviewsspecial.Dimensions
+import me.jameshunt.slideviewsspecial.Contract
 import me.jameshunt.slideviewsspecial.SlideOnTouch
 import me.jameshunt.slideviewsspecial.SlideOnTouch.PlaceToSnap
+import me.jameshunt.slideviewsspecial.SlideOnTouch.SlideValues.getTopHandleHeightForTopTouch
 
 /**
  * Created by James on 10/11/2017.
  */
-class SlideTopOnTouch(private val topView: View, private val bottomView: View) : SlideOnTouch {
+class SlideTopOnTouch(private val topView: View, private val bottomView: View, private val presenterForSlide: Contract.PresenterForSlide) : SlideOnTouch {
 
     private var startHeight = 0
     private var lastY = 0
@@ -50,26 +51,32 @@ class SlideTopOnTouch(private val topView: View, private val bottomView: View) :
 
     private fun getBottomHeight(): Int {
 
-        val percent = (lastY - SlideOnTouch.topHandleTitleHeight) / screenHeight.toFloat()
+        val topHandleHeight: Int = getTopHandleHeightForTopTouch(presenterForSlide, snapToLocation)
+
+        val percent = (lastY - topHandleHeight) / screenHeight.toFloat()
         val heightRequest = Math.round(SlideOnTouch.bottomHandleHeight - (percent * SlideOnTouch.bottomHandleHeight))
         return Math.min(heightRequest, SlideOnTouch.bottomHandleHeight)
     }
+
 
     override fun actionUp(event: MotionEvent) {
 
         val startHeight = topView.height
 
+        val topHandleHeight: Int = getTopHandleHeightForTopTouch(presenterForSlide, snapToLocation)
+
         val endHeight: Int = when (snapToLocation) {
             PlaceToSnap.BOTTOM -> {
-                screenHeight + Dimensions.dpToPx(60).toInt()
+                screenHeight + topHandleHeight
             }
             PlaceToSnap.TOP -> {
-                Dimensions.dpToPx(60).toInt()
+                //topHandleHeight
+                topHandleHeight
             }
         }
 
         val animation = ValueAnimator.ofObject(
-                TopSlideHeightEval(topView = topView, bottomView = bottomView),
+                TopSlideHeightEval(topView = topView, bottomView = bottomView, presenterForSlide = presenterForSlide, snapToLocation = snapToLocation),
                 startHeight,
                 endHeight).setDuration(300)
 

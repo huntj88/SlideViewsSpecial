@@ -13,7 +13,7 @@ interface SlideOnTouch {
 
     fun actionUp(event: MotionEvent)
 
-    fun getSnapToLocation(event: MotionEvent, lastY: Int, screenHeight: Int) : PlaceToSnap {
+    fun getSnapToLocation(event: MotionEvent, lastY: Int, screenHeight: Int): PlaceToSnap {
 
         val changeYTouch = event.rawY - lastY
         val changeYDistance = Dimensions.dpToPx(12)
@@ -21,12 +21,12 @@ interface SlideOnTouch {
         return when (event.rawY > lastY) {
             true -> {
                 //finger going down
-                if(event.rawY > screenHeight / 4 || changeYTouch > changeYDistance) PlaceToSnap.BOTTOM
+                if (event.rawY > screenHeight / 4 || changeYTouch > changeYDistance) PlaceToSnap.BOTTOM
                 else PlaceToSnap.TOP
             }
             false -> {
                 //finger going up
-                if(event.rawY < screenHeight / 4 * 3 || changeYTouch < -changeYDistance) PlaceToSnap.TOP
+                if (event.rawY < screenHeight / 4 * 3 || changeYTouch < -changeYDistance) PlaceToSnap.TOP
                 else PlaceToSnap.BOTTOM
             }
         }
@@ -38,7 +38,28 @@ interface SlideOnTouch {
     }
 
     companion object SlideValues {
-        val bottomHandleHeight:Int = Dimensions.dpToPx(28).toInt()
-        val topHandleTitleHeight = Dimensions.dpToPx(60).toInt()
+        val bottomHandleHeight: Int = Dimensions.dpToPx(28).toInt()
+        val topHandleBaseHeight = Dimensions.dpToPx(80).toInt()
+
+
+        fun getTopHandleHeightForTopTouch(presenterForSlide: Contract.PresenterForSlide, placeToSnap: PlaceToSnap): Int {
+            return when (placeToSnap) {
+                PlaceToSnap.BOTTOM -> {
+                    if (presenterForSlide.isAlbumSelected())
+                        topHandleBaseHeight - Dimensions.dpToPx(60).toInt()
+                    else
+                        topHandleBaseHeight - Dimensions.dpToPx(20).toInt()
+
+
+                }
+                PlaceToSnap.TOP -> {
+                    topHandleBaseHeight
+                }
+            }
+        }
+
+        fun getTopHandleHeightForBottomTouch(): Int {
+            return topHandleBaseHeight
+        }
     }
 }

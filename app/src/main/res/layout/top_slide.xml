@@ -22,11 +22,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <View
+    <include layout="@layout/top_handle"
         android:id="@+id/slide_handle_top"
         android:layout_width="0dp"
-        android:layout_height="120dp"
-        android:background="@color/colorPrimary"
+        android:layout_height="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

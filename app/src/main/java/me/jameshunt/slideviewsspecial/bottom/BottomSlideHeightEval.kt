@@ -1,10 +1,10 @@
 package me.jameshunt.slideviewsspecial.bottom
 
 import android.animation.IntEvaluator
-import android.util.Log
 import android.view.View
-import me.jameshunt.slideviewsspecial.Dimensions
+import me.jameshunt.slideviewsspecial.Contract
 import me.jameshunt.slideviewsspecial.SlideOnTouch
+import me.jameshunt.slideviewsspecial.SlideOnTouch.SlideValues.getTopHandleHeightForBottomTouch
 
 /**
  * Created by James on 10/11/2017.
@@ -30,15 +30,11 @@ class BottomSlideHeightEval(private val bottomView: View, private val topView: V
 
         topStartHeight = topParams.height
 
-        //if(startValue > endValue) {
         if (startValue in endValue + 1 until (screenHeight - SlideOnTouch.bottomHandleHeight)) {
-            Log.d("funky stuff", "first if bottom eval")
-            topParams.height = super.evaluate(fraction, topStartHeight, Dimensions.dpToPx(60).toInt())
+            val topHandleHeight: Int = getTopHandleHeightForBottomTouch()
+            topParams.height = super.evaluate(fraction, topStartHeight, topHandleHeight)
         } else if (startValue > SlideOnTouch.bottomHandleHeight) {
-            Log.d("funky stuff", "second if bottom eval")
             topParams.height = super.evaluate(fraction, topStartHeight, 0)
-        } else {
-            Log.d("funky stuff", "neither bottom eval" + "     startValue: " + startValue + "      endValue: " + endValue + "    bottomHandleHeight" + SlideOnTouch.bottomHandleHeight)
         }
 
 
