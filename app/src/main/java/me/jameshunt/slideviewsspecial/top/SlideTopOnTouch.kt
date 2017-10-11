@@ -11,7 +11,7 @@ import me.jameshunt.slideviewsspecial.SlideOnTouch.PlaceToSnap
 /**
  * Created by James on 10/11/2017.
  */
-class SlideTopOnTouch(private val topView: View, private val bottomView: View): SlideOnTouch {
+class SlideTopOnTouch(private val topView: View, private val bottomView: View) : SlideOnTouch {
 
     private var startHeight = 0
     private var lastY = 0
@@ -19,8 +19,6 @@ class SlideTopOnTouch(private val topView: View, private val bottomView: View): 
     private var snapToLocation: PlaceToSnap = PlaceToSnap.TOP
 
     private var screenHeight = 0
-
-    private var sizeOfBottom = Dimensions.dpToPx(56)
 
     override fun actionDown(event: MotionEvent) {
         screenHeight = (topView.parent as FrameLayout).height
@@ -34,13 +32,11 @@ class SlideTopOnTouch(private val topView: View, private val bottomView: View): 
         val totalHeightDiff = event.rawY - yStart
 
         val topParams = topView.layoutParams
-        topParams.height = startHeight + totalHeightDiff.toInt()
+        topParams.height = Math.max(startHeight + totalHeightDiff.toInt(), 0)
         topView.layoutParams = topParams
 
-        snapToLocation = when (event.rawY > lastY) {
-            true -> PlaceToSnap.BOTTOM
-            false -> PlaceToSnap.TOP
-        }
+
+        snapToLocation = getSnapToLocation(event, lastY, screenHeight)
 
         lastY = event.rawY.toInt()
 
@@ -54,9 +50,9 @@ class SlideTopOnTouch(private val topView: View, private val bottomView: View): 
 
     private fun getBottomHeight(): Int {
 
-        val percent = (lastY - sizeOfBottom)/ screenHeight.toFloat()
-        val heightRequest = Math.round(sizeOfBottom - (percent * sizeOfBottom))
-        return Math.min(heightRequest, sizeOfBottom.toInt())
+        val percent = (lastY - SlideOnTouch.topHandleTitleHeight) / screenHeight.toFloat()
+        val heightRequest = Math.round(SlideOnTouch.bottomHandleHeight - (percent * SlideOnTouch.bottomHandleHeight))
+        return Math.min(heightRequest, SlideOnTouch.bottomHandleHeight)
     }
 
     override fun actionUp(event: MotionEvent) {
@@ -73,7 +69,7 @@ class SlideTopOnTouch(private val topView: View, private val bottomView: View): 
         }
 
         val animation = ValueAnimator.ofObject(
-                TopSlideHeightEval(topView, bottomView),
+                TopSlideHeightEval(topView = topView, bottomView = bottomView),
                 startHeight,
                 endHeight).setDuration(300)
 
